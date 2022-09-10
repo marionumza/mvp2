@@ -1,0 +1,701 @@
+version: "2.4"
+
+services:
+  odoo:
+    extends:
+      file: common.yaml
+      service: odoo
+    env_file:
+      - .docker/odoo.env
+      - .docker/db-access.env
+    environment:
+      DOODBA_ENVIRONMENT: "${DOODBA_ENVIRONMENT-test}"
+      # To install demo data export DOODBA_WITHOUT_DEMO=false
+      WITHOUT_DEMO: "${DOODBA_WITHOUT_DEMO-all}"
+      SMTP_PORT: "1025"
+      SMTP_SERVER: smtplocal
+    restart: unless-stopped
+    depends_on:
+      - db
+      - smtp
+    networks:
+      default:
+      globalwhitelist_shared:
+      inverseproxy_shared:
+    labels:
+      doodba.domain.main: ""
+      traefik.enable: "true"
+      traefik.domain: ""
+      traefik.forbiddenCrawlers-0.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-0.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-0.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-0.port: 8072
+      traefik.forbiddenCrawlers-1.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-1.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-1.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-1.port: 8072
+      traefik.forbiddenCrawlers-2.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-2.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-2.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-2.port: 8072
+      traefik.forbiddenCrawlers-3.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-3.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-3.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-3.port: 8072
+      traefik.forbiddenCrawlers-4.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-4.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-4.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-4.port: 8072
+      traefik.forbiddenCrawlers-5.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-5.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-5.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-5.port: 8072
+      traefik.forbiddenCrawlers-6.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-6.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-6.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-6.port: 8072
+      traefik.forbiddenCrawlers-7.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-7.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-7.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-7.port: 8072
+      traefik.forbiddenCrawlers-8.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-8.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-8.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-8.port: 8072
+      traefik.forbiddenCrawlers-9.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-9.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-9.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-9.port: 8072
+      traefik.forbiddenCrawlers-10.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-10.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-10.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-10.port: 8072
+      traefik.forbiddenCrawlers-11.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-11.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-11.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-11.port: 8072
+      traefik.forbiddenCrawlers-12.frontend.headers.customResponseHeaders:
+        "X-Robots-Tag:noindex, nofollow"
+      traefik.forbiddenCrawlers-12.frontend.rule: Host:;Path:/{anything:.*}
+      traefik.longpolling-12.frontend.rule: Host:;Path:/longpolling/{anything:.*}
+      traefik.longpolling-12.port: 8072
+      traefik.http.services.mvp2-15-0-test-main.loadbalancer.server.port: 8069
+      traefik.http.services.mvp2-15-0-test-longpolling.loadbalancer.server.port: 8072
+      traefik.http.routers.mvp2-15-0-test-longpolling-0.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-0.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-0.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-0.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-0.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-0.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-0.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-0.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-0.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-0.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-0.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-0.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-0.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-0.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-0.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-0.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-1.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-1.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-1.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-1.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-1.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-1.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-1.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-1.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-1.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-1.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-1.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-1.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-1.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-1.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-1.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-1.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-2.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-2.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-2.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-2.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-2.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-2.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-2.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-2.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-2.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-2.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-2.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-2.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-2.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-2.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-2.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-2.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-3.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-3.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-3.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-3.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-3.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-3.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-3.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-3.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-3.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-3.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-3.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-3.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-3.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-3.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-3.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-3.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-4.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-4.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-4.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-4.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-4.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-4.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-4.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-4.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-4.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-4.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-4.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-4.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-4.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-4.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-4.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-4.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-5.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-5.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-5.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-5.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-5.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-5.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-5.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-5.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-5.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-5.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-5.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-5.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-5.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-5.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-5.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-5.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-6.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-6.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-6.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-6.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-6.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-6.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-6.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-6.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-6.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-6.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-6.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-6.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-6.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-6.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-6.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-6.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-7.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-7.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-7.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-7.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-7.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-7.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-7.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-7.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-7.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-7.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-7.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-7.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-7.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-7.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-7.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-7.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-8.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-8.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-8.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-8.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-8.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-8.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-8.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-8.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-8.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-8.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-8.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-8.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-8.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-8.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-8.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-8.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-9.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-9.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-9.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-9.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-9.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-9.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-9.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-9.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-9.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-9.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-9.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-9.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-9.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-9.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-9.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-9.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-10.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-10.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-10.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-10.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-10.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-10.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-10.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-10.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-10.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-10.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-10.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-10.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-10.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-10.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-10.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-10.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-11.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-11.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-11.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-11.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-11.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-11.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-11.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-11.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-11.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-11.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-11.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-11.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-11.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-11.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-11.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-11.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-longpolling-12.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-12.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-12.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-12.rule:
+        Host() && PathPrefix(`/longpolling/`)
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-12.service: mvp2-15-0-test-longpolling
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-12.middlewares: mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-12.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-longpolling-secure-12.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-12.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-12.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-12.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-12.rule:
+        Host() && (PathPrefix(`/`))
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-12.service: mvp2-15-0-test-main
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-12.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-12.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-forbiddenCrawlers-secure-12.tls.certResolver: letsencrypt
+    command:
+      - odoo
+      - --workers=2
+      - --max-cron-threads=1
+
+  db:
+    extends:
+      file: common.yaml
+      service: db
+    env_file:
+      - .docker/db-creation.env
+    restart: unless-stopped
+
+  smtp:
+    extends:
+      file: common.yaml
+      service: smtpfake
+    restart: unless-stopped
+    networks:
+      default:
+        aliases:
+          - smtplocal
+      inverseproxy_shared:
+    labels:
+      doodba.domain.main: ""
+      traefik.docker.network: "inverseproxy_shared"
+      traefik.enable: "true"
+      traefik.frontend.passHostHeader: "true"
+      traefik.mailhog-0.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-0.port: 8025
+      traefik.mailhog-1.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-1.port: 8025
+      traefik.mailhog-2.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-2.port: 8025
+      traefik.mailhog-3.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-3.port: 8025
+      traefik.mailhog-4.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-4.port: 8025
+      traefik.mailhog-5.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-5.port: 8025
+      traefik.mailhog-6.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-6.port: 8025
+      traefik.mailhog-7.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-7.port: 8025
+      traefik.mailhog-8.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-8.port: 8025
+      traefik.mailhog-9.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-9.port: 8025
+      traefik.mailhog-10.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-10.port: 8025
+      traefik.mailhog-11.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-11.port: 8025
+      traefik.mailhog-12.frontend.rule: Host:;PathPrefixStrip:/smtpfake/
+      traefik.mailhog-12.port: 8025
+      # Mailhog service
+      traefik.http.middlewares.mvp2-15-0-test-mailhog-stripprefix.stripPrefix.prefixes: /smtpfake/
+      traefik.http.services.mvp2-15-0-test-mailhog.loadbalancer.server.port: 8025
+      traefik.http.middlewares.mvp2-15-0-test-buffering.buffering.retryExpression:
+        IsNetworkError() && Attempts() < 5
+      traefik.http.middlewares.mvp2-15-0-test-compress.compress: "true"
+      ? traefik.http.middlewares.mvp2-15-0-test-forbid-crawlers.headers.customResponseHeaders.X-Robots-Tag
+      : "noindex, nofollow"
+      traefik.http.middlewares.mvp2-15-0-test-forceSecure.headers.forceSTSHeader: "true"
+      traefik.http.middlewares.mvp2-15-0-test-forceSecure.headers.sslRedirect: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-0.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-0.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-0.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-0.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-0.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-0.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-0.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-0.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-1.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-1.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-1.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-1.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-1.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-1.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-1.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-1.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-2.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-2.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-2.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-2.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-2.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-2.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-2.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-2.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-3.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-3.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-3.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-3.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-3.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-3.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-3.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-3.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-4.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-4.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-4.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-4.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-4.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-4.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-4.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-4.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-5.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-5.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-5.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-5.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-5.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-5.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-5.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-5.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-6.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-6.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-6.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-6.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-6.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-6.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-6.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-6.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-7.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-7.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-7.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-7.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-7.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-7.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-7.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-7.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-8.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-8.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-8.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-8.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-8.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-8.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-8.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-8.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-9.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-9.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-9.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-9.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-9.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-9.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-9.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-9.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-10.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-10.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-10.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-10.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-10.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-10.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-10.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-10.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-11.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-11.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-11.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-11.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-11.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-11.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-11.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-11.tls.certResolver: letsencrypt
+      traefik.http.routers.mvp2-15-0-test-mailhog-12.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-12.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-12.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-12.rule:
+        Host() && PathPrefix(`/smtpfake/`)
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-12.service: mvp2-15-0-test-mailhog
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-12.middlewares:
+        mvp2-15-0-test-buffering, mvp2-15-0-test-compress,
+        mvp2-15-0-test-forbid-crawlers, mvp2-15-0-test-forceSecure,
+        mvp2-15-0-test-mailhog-stripprefix
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-12.tls: "true"
+      traefik.http.routers.mvp2-15-0-test-mailhog-secure-12.tls.certResolver: letsencrypt
+    volumes:
+      - "smtpconf:/etc/mailhog:ro,z"
+    entrypoint: [sh, -c]
+    command:
+      - test -r /etc/mailhog/auth && export MH_AUTH_FILE=/etc/mailhog/auth; exec MailHog
+
+networks:
+  default:
+    internal: ${DOODBA_NETWORK_INTERNAL-true}
+    driver_opts:
+      encrypted: 1
+
+  globalwhitelist_shared:
+    external: true
+
+  inverseproxy_shared:
+    external: true
+
+volumes:
+  filestore:
+  db:
+  smtpconf:
